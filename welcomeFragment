@@ -1,0 +1,94 @@
+using System;
+using System.Collections.Generic;
+using Android.OS;
+using Android.Support.V4.App;
+using Android.Views;
+using Android.Widget;
+using Utility.Resources.Adapter;
+
+namespace Utility
+{
+    public class WelcomeFragment : Fragment
+    {
+
+        Button signup;
+        ImageButton scanButton;
+        
+        public override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+            
+            // Create your fragment here
+        }
+
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            // Use this to return your custom view for this Fragment
+            // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
+
+            var view = inflater.Inflate(Resource.Layout.fragment_welcome, container, false);
+            signup = view.FindViewById<Button>(Resource.Id.signup);
+            scanButton = view.FindViewById<ImageButton>(Resource.Id.scan_package);
+            
+            signup.Click += Signup_Click;
+            return view;
+        }
+
+        
+        private void Signup_Click(object sender, EventArgs e)
+        {
+
+            Fragment fragment = new ManageFragment();
+            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            transaction.Replace(Resource.Id.main, fragment); // fragmen container id in first parameter is the  container(Main layout id) of Activity
+            transaction.AddToBackStack(null);  // this will manage backstack
+            transaction.Commit();
+        }
+
+    }
+    public class ManageFragment : Fragment
+    {
+        public override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            // Create your fragment here
+        }
+
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            // Use this to return your custom view for this Fragment
+            // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
+
+            var view = inflater.Inflate(Resource.Layout.fragment_manage, container, false);
+
+            return view;
+        }
+    }
+    public class ShipFragment : Fragment
+    {
+        ListView shipList;
+        public override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            // Create your fragment here
+        }
+
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            // Use this to return your custom view for this Fragment
+            // return inflater.Inflate(Resource.Layout.YourFragment, container, false);
+            var view = inflater.Inflate(Resource.Layout.fragment_ship, container, false);
+            shipList = view.FindViewById<ListView>(Resource.Id.shipping_item);
+            List<User> users = new List<User>();
+            users.Add(new User() {Name="Shipping History", ImageIcon=Resource.Drawable.icon2 });
+            users.Add(new User() { Name = "Ship a parcel", ImageIcon = Resource.Drawable.parcel });
+            users.Add(new User() { Name = "Get a quote", ImageIcon = Resource.Drawable.icon3 });
+
+            ShipAdapter shipAdapter = new ShipAdapter(users, Activity);
+            shipList.Adapter = shipAdapter;
+            return view;
+        }
+    }
+}
